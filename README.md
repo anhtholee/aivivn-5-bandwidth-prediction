@@ -41,7 +41,7 @@ id,UPDATE_TIME,ZONE_CODE,HOUR_ID
 Apart from the above mentioned features, we also have `id` which is the unique id for the datapoints.
 
 ## Approach
-I used 2 slightly different XGBoost models, one for each of the target variable we have (`bandwidth_total` and `max_user`). The part that took me most of the time is not training, but feature engineering.
+I used 2 slightly different XGBoost models, one for each of the target variable we have (`bandwidth_total` and `max_user`). The part that took me most of the time is not choosing the model, but feature engineering.
 
 ### Features
 Here are the features I included in the data before feeding it into XGBoost.
@@ -85,3 +85,9 @@ I also calculated the lag features for 1 day, 3 days and 1 week of the last quar
 
 #### Linear regression prediction
 Finally, I used the Ridge regression model to fit the training data (using time features, special event features and median features) and use the prediction on both the training and testing data as a feature (for both target variables).
+
+## References
+- [1] [Time series Introduction](https://people.maths.bris.ac.uk/~magpn/Research/LSTS/STSIntro.html)
+- [2] [XGBoost Mathematics Explained](https://towardsdatascience.com/xgboost-mathematics-explained-58262530904a)
+- [3] [Using XGBoost in Python](https://www.datacamp.com/community/tutorials/xgboost-in-python)
+- [4] [Basic time series manipulation with pandas](https://towardsdatascience.com/basic-time-series-manipulation-with-pandas-4432afee64ea)

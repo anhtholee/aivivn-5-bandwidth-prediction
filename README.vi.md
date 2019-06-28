@@ -6,7 +6,7 @@ Model của mình cho cuộc thi thứ 5 của AIVIVN: [Dự đoán lưu lư�
 Một công ty cung cấp nền tảng giải trí cho phép user sử dụng các dịch vụ music, video, live stream, chat, … Hệ thống công ty chia thành các zone theo khu vực địa lý. Để đáp ứng số lượng user ngày càng tăng, công ty muốn dự đoán được tổng bandwidth của mỗi server và số lượng tối đa user truy cập đồng thời vào server trong vòng một tháng tiếp theo để lên kế hoạch hoạt động.
 
 ## Data
-
+Tất cả dữ liệu nằm trong thư mục `data`.
 ### Tập training
 Dữ liệu huấn luyện (file `train.csv`) gồm hơn 35 nghìn dòng. Dưới đây là năm dòng đầu tiên.
 
@@ -40,7 +40,7 @@ id,UPDATE_TIME,ZONE_CODE,HOUR_ID
 Trong đó `UPDATE_TIME, HOUR_ID, ZONE_CODE` được định nghĩa như trên, id là mã số tương ứng cho file nộp bài. Các đội chơi cần dự đoán `BANDWIDTH_TOTAL`, và `MAX_USER` cho mỗi dòng.
 
 ## Hướng giải quyết
-Do chưa có nhiều kinh nghiệm áp dụng DL nên mình tiếp cận bài này bằng ML truyền thống, kể cả phương pháp non-ML như median estimation (cho kết quả public khoảng `24~25`). Sau khi dùng Random forest và linear regression nhưng kết quả public không xuống dưới được `9`, mình đã tập trung vào XGBoost. Với cả 2 biến target (`bandwidth_total` và `max_user`), mình đều dùng XGBoost làm model duy nhất (tham số có thay đổi một chút cho mỗi model). Phần model training như vậy khá đơn giản (chỉ dùng 1 model), phần chiếm thời gian của mình nhiều nhất là feature engneering. Trong phần còn lại mình sẽ trình bày các feature mình sử dụng cho data này.
+Do chưa có nhiều kinh nghiệm áp dụng DL nên mình tiếp cận bài này bằng ML truyền thống, kể cả phương pháp non-ML như median estimation (cho kết quả sMAPE public khoảng `24~25`). Sau khi dùng Random forest và linear regression nhưng kết quả public không xuống dưới được `9`, mình đã tập trung vào XGBoost (Đọc thêm về XGBoost ở phần [Tham khảo](#tham-khảo)). Với cả 2 biến target (`bandwidth_total` và `max_user`), mình đều dùng XGBoost làm model duy nhất (tham số có thay đổi một chút cho mỗi model). Phần model training như vậy khá đơn giản (chỉ dùng 1 model), phần chiếm thời gian của mình nhiều nhất là nghiên cứu xem làm feature engneering thế nào. Trong phần còn lại mình sẽ trình bày các feature mình sử dụng cho data này.
 
 ### Features
 #### Time features (các đặc trưng về thời gian)
@@ -89,4 +89,5 @@ Cuối cùng, mình dùng linear regression để fit tập train (dùng 
 ## Tham khảo
 - [1] [Giải thích về autocorrelation (tự tương quan)](https://amorfati.xyz/hoc/nhan-dang-va-xu-ly-hien-tuong-tu-tuong-quan-autocorrelation-trong-ols)
 - [2] [Giải thích về XGBoost](https://towardsdatascience.com/xgboost-mathematics-explained-58262530904a)
-- [3] [Tianqi Chen, Carlos Guestrin: XGBoost: A Scalable Tree Boosting System](https://arxiv.org/abs/1603.02754)
+- [3] [Using XGBoost in Python](https://www.datacamp.com/community/tutorials/xgboost-in-python)
+- [4] [Basic time series manipulation with pandas](https://towardsdatascience.com/basic-time-series-manipulation-with-pandas-4432afee64ea)

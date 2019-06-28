@@ -10,33 +10,40 @@
 # Import libraries
 import numpy as np
 import pandas as pd 
-# from functools import reduce
 import xgboost as xgb # XGBoost model
 from sklearn.linear_model import Ridge # Linear regression
-from sklearn.preprocessing import LabelEncoder, StandardScaler, MinMaxScaler, RobustScaler
+from sklearn.preprocessing import LabelEncoder
 from utils.preprocessing import *
-import sys, os, logging
-import warnings
-warnings.simplefilter(action='ignore', category=FutureWarning)
+import sys, os, logging, warnings
 
+# Disable future warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+# Log configuration
+logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
+
+# Set paths
 BASE_DIR = os.path.join('data')
 TRAIN_PATH = os.path.join(BASE_DIR, 'train.csv')
 TEST_PATH = os.path.join(BASE_DIR, 'test_id.csv')
-logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
+
+# Main program
 if __name__ == "__main__":
     # =========== LOAD THE DATA ===========
     try:
         df, test_df = load_csv(TRAIN_PATH), load_csv(TEST_PATH)
         logging.info('Training data and testing data loaded.')
     except Exception as e:
-        logging.error('Cannot load the data. {}'.format(e))
+        logging.error('Could not load the data. {}'.format(e))
+        sys.exit()
     
     # =========== FEATURE ENGINEERING ===========
     try:
         # Time features
         df, test_df = add_time_features(df), add_time_features(test_df)
+        
         # Special events featuers
         df, test_df = add_special_days_features(df), add_special_days_features(test_df)
+
         # Zone features
         zfeatures = ['median_user_1m', 'median_bw_1m', 'median_user_3m', 'median_bw_3m', 'median_user_6m', 'median_bw_6m', 'median_user_1y', 'median_bw_1y']
         aufeatures = ['lag_user_1d', 'lag_user_3d', 'lag_user_1w', 'lag_bw_1d', 'lag_bw_3d', 'lag_bw_1w']   
@@ -70,7 +77,8 @@ if __name__ == "__main__":
         test['ridge_u'] = clf2.predict(test[features + zfeatures])
         logging.info('New features added. Ready for training.')
     except Exception as e:
-        logging.error('Something wrong. {}'.format(e))
+        logging.error('Something wrong with feature engineering. {}'.format(e))
+        sys.exit()
 
     # =========== MODELLING ===========
     # Init the models
@@ -121,6 +129,7 @@ if __name__ == "__main__":
         logging.info("Training complete. Ready for the submission.")
     except Exception as e:
         logging.error("Could not train the data. {}".format(e))
+        sys.exit()
             
     # =========== SUBMISSION ===========
     try:
@@ -131,4 +140,5 @@ if __name__ == "__main__":
         logging.info('Submission file successfully created.')
     except Exception as e:
         logging.error("Could not save the csv file. {}".format(e))
+        sys.exit()
 

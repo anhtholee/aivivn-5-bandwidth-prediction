@@ -2,7 +2,7 @@
 import numpy as np 
 import pandas as pd 
 from functools import reduce
-from sklearn.preprocessing import LabelEncoder, StandardScaler, MinMaxScaler, RobustScaler
+from sklearn.preprocessing import MinMaxScaler
 
 def load_csv(path):
     """Load dataframe from a csv file
@@ -75,7 +75,6 @@ def add_special_days_features(df):
 
     return df
 
-
 def zone_features(df, zfeatures, aufeatures):
     """Create zone features from the data
     
@@ -114,14 +113,14 @@ def zone_features(df, zfeatures, aufeatures):
     # Autocorrelation features
     zones_autocorr = df[(df['ds'] >= '2018-12-09') & (df['ds'] < '2019-03-10')].groupby(['zone_code'], as_index=False).agg({
         'max_user': {
-          'lag_user_1d' :lambda x: pd.Series.autocorr(x, 24),
-          'lag_user_3d' :lambda x: pd.Series.autocorr(x, 3*24),
-          'lag_user_1w' :lambda x: pd.Series.autocorr(x, 24*7),
+            'lag_user_1d' :lambda x: pd.Series.autocorr(x, 24),
+            'lag_user_3d' :lambda x: pd.Series.autocorr(x, 3*24),
+            'lag_user_1w' :lambda x: pd.Series.autocorr(x, 24*7),
         }, 
         'bandwidth_total': {
-          'lag_bw_1d' :lambda x: pd.Series.autocorr(x, 24),
-          'lag_bw_3d' :lambda x: pd.Series.autocorr(x, 3*24),
-          'lag_bw_1w' :lambda x: pd.Series.autocorr(x, 24*7),
+            'lag_bw_1d' :lambda x: pd.Series.autocorr(x, 24),
+            'lag_bw_3d' :lambda x: pd.Series.autocorr(x, 3*24),
+            'lag_bw_1w' :lambda x: pd.Series.autocorr(x, 24*7),
         }
     }).fillna(0)
     zones_autocorr.columns.droplevel()
