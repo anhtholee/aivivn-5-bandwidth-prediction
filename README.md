@@ -86,13 +86,14 @@ From the training data, I could extract the median total bandwidth and median ma
 ##### Autocorrelation features
 I also calculated the lag features for 1 day, 3 days and 1 week of the last quarter of the data.
 
-#### Linear regression prediction
-Finally, I used the Ridge regression model to fit the training data (using time features, special event features and median features) and use the prediction on both the training and testing data as a feature (for both target variables).
+#### Linear regression prediction features
+Finally, I used the Ridge regression model to fit the training data (using time features, special event features and median features) and use the prediction on both the training and testing data as a feature (for both target variables). 
+
+## Results
 
 ## References
 - [1] [Time series Introduction](https://people.maths.bris.ac.uk/~magpn/Research/LSTS/STSIntro.html)
 - [2] [XGBoost Mathematics Explained](https://towardsdatascience.com/xgboost-mathematics-explained-58262530904a)
 - [3] [Using XGBoost in Python](https://www.datacamp.com/community/tutorials/xgboost-in-python)
 - [4] [Basic time series manipulation with pandas](https://towardsdatascience.com/basic-time-series-manipulation-with-pandas-4432afee64ea)
-- [5] [Tutorial: Time series forecasting with XGBoost](https://www.kaggle.com/robikscube/tutorial-time-series-forecasting-with-xgboost
-)
+- [5] [Tutorial: Time series forecasting with XGBoost](https://www.kaggle.com/robikscube/tutorial-time-series-forecasting-with-xgboost)

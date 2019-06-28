@@ -40,7 +40,7 @@ id,UPDATE_TIME,ZONE_CODE,HOUR_ID
 Trong đó `UPDATE_TIME, HOUR_ID, ZONE_CODE` được định nghĩa như trên, id là mã số tương ứng cho file nộp bài. Các đội chơi cần dự đoán `BANDWIDTH_TOTAL`, và `MAX_USER` cho mỗi dòng.
 
 ## Hướng giải quyết
-Do chưa có nhiều kinh nghiệm áp dụng DL nên mình tiếp cận bài này bằng ML truyền thống, kể cả phương pháp non-ML như median estimation (cho kết quả sMAPE public khoảng `24~25`). Sau khi dùng Random forest và linear regression nhưng kết quả public không xuống dưới được `9`, mình đã tập trung vào XGBoost (Đọc thêm về XGBoost ở phần [Tham khảo](#tham-khảo)). Với cả 2 biến target (`bandwidth_total` và `max_user`), mình đều dùng XGBoost làm model duy nhất (tham số có thay đổi một chút cho mỗi model). Phần model training như vậy khá đơn giản (chỉ dùng 1 model), phần chiếm thời gian của mình nhiều nhất là nghiên cứu xem làm feature engneering thế nào. Trong phần còn lại mình sẽ trình bày các feature mình sử dụng cho data này.
+Do chưa có nhiều kinh nghiệm áp dụng DL nên mình tiếp cận bài này bằng ML truyền thống, kể cả phương pháp non-ML như median estimation (cho kết quả sMAPE public khoảng `24~25`). Sau khi dùng Random forest và linear regression nhưng kết quả public không xuống dưới được `9`, mình đã tập trung vào XGBoost (Đọc thêm về XGBoost ở phần [Tham khảo](#tham-khảo)). Với cả 2 biến target (`bandwidth_total` và `max_user`), mình đều dùng XGBoost làm model duy nhất (tham số có thay đổi một chút cho mỗi model). Phần model training như vậy khá đơn giản (chỉ dùng 1 model), phần chiếm thời gian của mình nhiều nhất là nghiên cứu xem làm feature engneering thế nào. Trong phần còn lại mình sẽ trình bày các feature mình sử dụng cho bài này.
 
 ### Features
 #### Time features (các đặc trưng về thời gian)
@@ -83,13 +83,14 @@ Từ dữ liệu train, mình lấy được median của total bandwidth 
 ##### Autocorrelation features (Đặc trưng tự tương quan)
 Với 3 tháng gần nhất trong tập train, mình tính độ tự tương quan cho mỗi zone với các độ trễ lần lượt là 1,3,7 ngày.
 
-#### Linear regression prediction
-Cuối cùng, mình dùng linear regression để fit tập train (dùng các feature về thời gian, sự kiện đặc biệt và median của zone ) và sau đó dùng chính dự đoán của model đó trên tập train và test để làm feature cho XGBoost (`ridge_bw` và `ridge_u`).
+#### Linear regression prediction features
+Cuối cùng, mình dùng linear regression để fit tập train (dùng các feature về thời gian, sự kiện đặc biệt và median của zone) và sau đó dùng chính dự đoán của model đó (trên cả tập train và test) để làm feature mới cho XGBoost (`ridge_bw` và `ridge_u`). Mình đã thử 2 model của sklearn là Ridge và Lasso (dùng các thông số mặc định) thì Ridge cho kết quả public tốt hơn nên mình chọn Ridge.
+
+## Kết quả
 
 ## Tham khảo
 - [1] [Giải thích về autocorrelation (tự tương quan)](https://amorfati.xyz/hoc/nhan-dang-va-xu-ly-hien-tuong-tu-tuong-quan-autocorrelation-trong-ols)
 - [2] [Giải thích về XGBoost](https://towardsdatascience.com/xgboost-mathematics-explained-58262530904a)
 - [3] [Using XGBoost in Python](https://www.datacamp.com/community/tutorials/xgboost-in-python)
 - [4] [Basic time series manipulation with pandas](https://towardsdatascience.com/basic-time-series-manipulation-with-pandas-4432afee64ea)
-- [5] [Tutorial: Time series forecasting with XGBoost](https://www.kaggle.com/robikscube/tutorial-time-series-forecasting-with-xgboost
-)
+- [5] [Tutorial: Time series forecasting with XGBoost](https://www.kaggle.com/robikscube/tutorial-time-series-forecasting-with-xgboost)
