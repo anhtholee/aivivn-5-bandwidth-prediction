@@ -63,10 +63,13 @@ There are 2 periods in the training data where we see:
 
 And those 2 periods happen to be roughly at the same time of the year (for 2018 and 2019).
 
-From those observations, I decided to create 2 features `abnormal_bw` and `abnormal_u` which show the impact of those days in the target variables. For `ZONE01`, since both bandwidth and max users had a big decrease, I set `abnormal_bw` and `abnormal_u` to `-1`. Similarly for `ZONE02`, these 2 values will be `1` on those days and `0` otherwise. For `ZONE03`, I set `abnormal_bw` to `0.2` since there is only a slight increase in total bandwidth, but `abnormal_u` to `0.8` since the increase was more noticeable.
+From those observations, I decided to create 2 features `abnormal_bw` and `abnormal_u` which show the impact of those days in the target variables. 
+- For `ZONE01`, since both bandwidth and max users had a big decrease, I set `abnormal_bw` and `abnormal_u` to `-1`. 
+- Similarly for `ZONE02`, these 2 values will be `0.8` on such days and `0` otherwise. 
+- For `ZONE03`, I set `abnormal_bw` to `0.2` since there is only a slight increase in total bandwidth, but `abnormal_u` to `0.6` since the increase was more noticeable.
 
 ##### Holiday events
-I incorporated the holiday events of Vietnam (in 2018 and 2019) into the boolean feature `holiday`.
+I incorporated the holiday events of Vietnam (in 2018 and 2019) into the boolean feature `holiday`. I also added the Christmas days in 2017 (from Dec 23 to Dec 25) since the total bandwidth and max users in `ZONE01` had suddenly increased during those days
 
 #### Zone features
 ##### Medians

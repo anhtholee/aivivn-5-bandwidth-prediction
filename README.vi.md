@@ -62,11 +62,11 @@ Khi vẽ các time series của từng zone lên mình thấy có 2 khoản
 
 Cả 2 khoảng thời gian này đều rơi vào đầu năm (2018 và 2019). Từ đó, mình tạo thêm 2 feature mới là `abnormal_bw` và `abnormal_u` để 'đo' mức độ ảnh hưởng của những khoảng tăng/giảm đột biến này đối với total bandwidth và max users (Lúc đầu mình dùng boolean - `1` cho những ngày đặc biệt, `0` cho những ngày còn lại - nhưng cho kết quả không tốt bằng). 
 - Với `ZONE01`, do cả total bandwidth và max users giảm đột biến, mình cho `abnormal_bw` và `abnormal_u` bằng `-1` trong những ngày đặc biệt, `0` cho các ngày khác. 
-- Tương tự với `ZONE02`, các biến sẽ lần lượt là `1` vào ngày đặc biệt và `0` cho ngày khác. 
-- Với `ZONE03`, mình cho `abnormal_bw` bằng `0.2`  do total bandwidth chỉ tăng rất nhẹ (gần như không tăng đột biến), nhưng cho `abnormal_u` bằng `0.8` vì max users tăng rõ rệt hơn.
+- Tương tự với `ZONE02`, các biến sẽ lần lượt là `0.8` vào ngày đặc biệt và `0` cho ngày khác. 
+- Với `ZONE03`, mình cho `abnormal_bw` bằng `0.2`  do total bandwidth chỉ tăng rất nhẹ (gần như không tăng đột biến), nhưng cho `abnormal_u` bằng `0.6` vì max users tăng rõ rệt hơn.
 
 ##### Holiday events (Ngày lễ)
-Mình dùng biến boolean `holiday` để ghi nhận các ngày lễ của Việt Nam.
+Mình dùng biến boolean `holiday` để ghi nhận các ngày lễ của Việt Nam. Mình có thêm cả 3 ngày từ 23/12/2017 đến 25/12/2017 vào danh sách holiday, do total bandwidth và max user của `ZONE01` tăng đột biến.
 
 #### Zone features (Đặc trưng từng zone)
 ##### Median (trung vị)
