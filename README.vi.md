@@ -1,3 +1,4 @@
+(English version [here](README.md))
 # AIVIVN - Dự đoán lưu lượng server 2
 Model của mình cho cuộc thi thứ 5 của AIVIVN: [Dự đoán lưu lượng server 2](https://www.aivivn.com/contests/5). Để chạy code, các bạn cài dependencies: `pip install -r requirements.txt`, sau đó chạy file `main.py`.
 

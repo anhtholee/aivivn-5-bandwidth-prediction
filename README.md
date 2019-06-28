@@ -1,3 +1,4 @@
+(Vietnamese version [here](README.vi.md))
 # AIVIVN's 5th competition: Server bandwidth prediction
 My solution for AIVIVN's 5th competition: [Server bandwidth prediction](https://www.aivivn.com/contests/5). To generate the submission file, install the dependencies using the command: `pip install -r requirements.txt`, and then run the `main.py` file.
 
