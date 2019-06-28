@@ -50,21 +50,24 @@ def add_special_days_features(df):
     range2 = pd.date_range('2019-01-30', '2019-02-12')
     abnormals = range1.union(range2)
 
+    # For zone 1 only
+    # range3 = pd.date_range('2017-12-23', '2017-12-25')
+
     # Init 2 new columns
     df['abnormal_bw'], df['abnormal_u'] = 0,0
     # Set the abnormal weights for each zone (negative if decrease, positive if increase)
     # For total bandwidth
     df.loc[df['zone_code'].isin(['ZONE01']) ,'abnormal_bw'] = df[df['zone_code'].isin(['ZONE01'])].update_time.apply(lambda date: -1 if pd.to_datetime(date) in abnormals else 0)
-    df.loc[df['zone_code'].isin(['ZONE02']) ,'abnormal_bw'] = df[df['zone_code'].isin(['ZONE02'])].update_time.apply(lambda date: 1 if pd.to_datetime(date) in abnormals else 0)
+    df.loc[df['zone_code'].isin(['ZONE02']) ,'abnormal_bw'] = df[df['zone_code'].isin(['ZONE02'])].update_time.apply(lambda date: 0.8 if pd.to_datetime(date) in abnormals else 0)
     df.loc[df['zone_code'].isin(['ZONE03']) ,'abnormal_bw'] = df[df['zone_code'].isin(['ZONE03'])].update_time.apply(lambda date: 0.2 if pd.to_datetime(date) in abnormals else 0)
 
     # For max users
     df.loc[df['zone_code'].isin(['ZONE01']) ,'abnormal_u'] = df[df['zone_code'].isin(['ZONE01'])].update_time.apply(lambda date: -1 if pd.to_datetime(date) in abnormals else 0)
-    df.loc[df['zone_code'].isin(['ZONE02']) ,'abnormal_u'] = df[df['zone_code'].isin(['ZONE02'])].update_time.apply(lambda date: 1 if pd.to_datetime(date) in abnormals else 0)
-    df.loc[df['zone_code'].isin(['ZONE03']) ,'abnormal_u'] = df[df['zone_code'].isin(['ZONE03'])].update_time.apply(lambda date: 0.8 if pd.to_datetime(date) in abnormals else 0)
+    df.loc[df['zone_code'].isin(['ZONE02']) ,'abnormal_u'] = df[df['zone_code'].isin(['ZONE02'])].update_time.apply(lambda date: 0.8 if pd.to_datetime(date) in abnormals else 0)
+    df.loc[df['zone_code'].isin(['ZONE03']) ,'abnormal_u'] = df[df['zone_code'].isin(['ZONE03'])].update_time.apply(lambda date: 0.6 if pd.to_datetime(date) in abnormals else 0)
 
     # Holidays
-    holidays = pd.to_datetime(['2018-01-01', 
+    holidays = pd.to_datetime(['2018-01-01', '2017-12-23', '2017-12-24', '2017-12-25',
                            '2018-02-14', '2018-02-15', '2018-02-16', '2018-02-17', '2018-02-18', '2018-02-19', '2018-02-20',
                            '2018-03-27', '2018-04-30', '2018-05-01', '2018-09-02', '2018-09-03', '2018-12-31',
                            '2019-01-01', '2019-02-04', '2019-02-05', '2019-02-06', '2019-02-07', '2019-02-08',
