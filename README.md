@@ -94,3 +94,5 @@ Finally, I used the Ridge regression model to fit the training data (using time 
 - [2] [XGBoost Mathematics Explained](https://towardsdatascience.com/xgboost-mathematics-explained-58262530904a)
 - [3] [Using XGBoost in Python](https://www.datacamp.com/community/tutorials/xgboost-in-python)
 - [4] [Basic time series manipulation with pandas](https://towardsdatascience.com/basic-time-series-manipulation-with-pandas-4432afee64ea)
+- [5] [Tutorial: Time series forecasting with XGBoost](https://www.kaggle.com/robikscube/tutorial-time-series-forecasting-with-xgboost
+)

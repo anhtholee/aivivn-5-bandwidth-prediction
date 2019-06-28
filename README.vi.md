@@ -66,7 +66,7 @@ Cả 2 khoảng thời gian này đều rơi vào đầu năm (2018 và 20
 - Với `ZONE03`, mình cho `abnormal_bw` bằng `0.2`  do total bandwidth chỉ tăng rất nhẹ (gần như không tăng đột biến), nhưng cho `abnormal_u` bằng `0.6` vì max users tăng rõ rệt hơn.
 
 ##### Holiday events (Ngày lễ)
-Mình dùng biến boolean `holiday` để ghi nhận các ngày lễ của Việt Nam. Mình có thêm cả 3 ngày từ 23/12/2017 đến 25/12/2017 vào danh sách holiday, do total bandwidth và max user của `ZONE01` tăng đột biến.
+Mình dùng biến boolean `holiday` để ghi nhận các ngày lễ của Việt Nam. Mình có thêm cả 3 ngày từ 23/12/2017 đến 25/12/2017 vào danh sách holidays, do total bandwidth và max user của `ZONE01` tăng đột biến.
 
 #### Zone features (Đặc trưng từng zone)
 ##### Median (trung vị)
@@ -91,3 +91,5 @@ Cuối cùng, mình dùng linear regression để fit tập train (dùng 
 - [2] [Giải thích về XGBoost](https://towardsdatascience.com/xgboost-mathematics-explained-58262530904a)
 - [3] [Using XGBoost in Python](https://www.datacamp.com/community/tutorials/xgboost-in-python)
 - [4] [Basic time series manipulation with pandas](https://towardsdatascience.com/basic-time-series-manipulation-with-pandas-4432afee64ea)
+- [5] [Tutorial: Time series forecasting with XGBoost](https://www.kaggle.com/robikscube/tutorial-time-series-forecasting-with-xgboost
+)
