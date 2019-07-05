@@ -10,8 +10,8 @@
 # Import libraries
 import numpy as np
 import pandas as pd 
-import xgboost as xgb # XGBoost model
-from sklearn.linear_model import Ridge # Linear regression
+import xgboost as xgb
+from sklearn.linear_model import Ridge
 from sklearn.preprocessing import LabelEncoder
 from utils.preprocessing import *
 import sys, os, logging, warnings

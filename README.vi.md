@@ -39,8 +39,11 @@ id,UPDATE_TIME,ZONE_CODE,HOUR_ID
 ```
 Trong đó `UPDATE_TIME, HOUR_ID, ZONE_CODE` được định nghĩa như trên, id là mã số tương ứng cho file nộp bài. Các đội chơi cần dự đoán `BANDWIDTH_TOTAL`, và `MAX_USER` cho mỗi dòng.
 
-## Hướng giải quyết
-Do chưa có nhiều kinh nghiệm áp dụng DL nên mình tiếp cận bài này bằng ML truyền thống, kể cả phương pháp non-ML như median estimation (cho kết quả sMAPE public khoảng `24~25`). Sau khi dùng Random forest và linear regression nhưng kết quả public không xuống dưới được `9`, mình đã tập trung vào XGBoost (Đọc thêm về XGBoost ở phần [Tham khảo](#tham-khảo)). Với cả 2 biến target (`bandwidth_total` và `max_user`), mình đều dùng XGBoost làm model duy nhất (tham số có thay đổi một chút cho mỗi model). Phần model training như vậy khá đơn giản (chỉ dùng 1 model), phần chiếm thời gian của mình nhiều nhất là nghiên cứu xem làm feature engneering thế nào. Trong phần còn lại mình sẽ trình bày các feature mình sử dụng cho bài này.
+## Baseline 1: Median of medians
+Với chỉ 50 dòng code, phương pháp non-ML này cho điểm public LB rất tốt (xấp xỉ `6.2`). Mấu chốt là tính theo từng zone và từng giờ: Với mỗi zone và mỗi giờ, mình tính median của 1,2,3,5,8 ngày gần nhất, sau đó lấy median của các median nói trên để dự đoán cho zone và giờ tương ứng của tập test. Ý tưởng của phương pháp này mình học được từ [kernel này](https://www.kaggle.com/safavieh/median-estimation-by-fibonacci-et-al-lb-44-9) trên Kaggle.
+
+## Baseline 2: XGBoost
+Model cho điểm cao nhất trên public LB của mình là XGBoost (Đọc thêm về XGBoost ở phần [Tham khảo](#tham-khảo)). Với cả 2 biến target (`bandwidth_total` và `max_user`), mình đều dùng XGBoost làm model duy nhất (tham số có thay đổi một chút cho mỗi model). Phần model training như vậy khá đơn giản (chỉ dùng 1 model), phần chiếm thời gian của mình nhiều nhất là nghiên cứu xem làm feature engneering thế nào. Trong phần còn lại mình sẽ trình bày các feature mình sử dụng cho bài này.
 
 ### Features
 #### Time features (các đặc trưng về thời gian)
@@ -87,6 +90,9 @@ Với 3 tháng gần nhất trong tập train, mình tính độ tự t
 Cuối cùng, mình dùng linear regression để fit tập train (dùng các feature về thời gian, sự kiện đặc biệt và median của zone) và sau đó dùng chính dự đoán của model đó (trên cả tập train và test) để làm feature mới cho XGBoost (`ridge_bw` và `ridge_u`). Mình đã thử 2 model của sklearn là Ridge và Lasso (dùng các thông số mặc định) thì Ridge cho kết quả public tốt hơn nên mình chọn Ridge.
 
 ## Kết quả
+
+## Mở rộng
+Có rất nhiều hướng khác để giải quyết bài toán time series, trong tương lai gần mình sẽ cố gắng thử áp dụng Deep Learning lên data này và so sánh với các phương pháp ML truyền thống. Với ML truyền thống, feature engineering sẽ tốn nhiều thời gian do kết quả model phụ thuộc rất nhiều vào feature của dữ liệu.
 
 ## Tham khảo
 - [1] [Giải thích về autocorrelation (tự tương quan)](https://amorfati.xyz/hoc/nhan-dang-va-xu-ly-hien-tuong-tu-tuong-quan-autocorrelation-trong-ols)

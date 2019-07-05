@@ -91,6 +91,9 @@ Finally, I used the Ridge regression model to fit the training data (using time 
 
 ## Results
 
+## Future works
+There are a lot of room for improvement in this problem. With the enormous development of deep learning research in the recent years, one can try incorporating deep neural network models into this problem and see if it could surpass the traditionl ML approaches, which rely very much on the features of the dataset.
+
 ## References
 - [1] [Time series Introduction](https://people.maths.bris.ac.uk/~magpn/Research/LSTS/STSIntro.html)
 - [2] [XGBoost Mathematics Explained](https://towardsdatascience.com/xgboost-mathematics-explained-58262530904a)
