@@ -39,8 +39,8 @@ id,UPDATE_TIME,ZONE_CODE,HOUR_ID
 ```
 Trong đó `UPDATE_TIME, HOUR_ID, ZONE_CODE` được định nghĩa như trên, id là mã số tương ứng cho file nộp bài. Các đội chơi cần dự đoán `BANDWIDTH_TOTAL`, và `MAX_USER` cho mỗi dòng.
 
-## Baseline 1: Median of medians
-Với chỉ 50 dòng code, phương pháp non-ML này cho điểm public LB rất tốt (xấp xỉ `6.2`). Mấu chốt là tính theo từng zone và từng giờ: Với mỗi zone và mỗi giờ, mình tính median của 1,2,3,5,8 ngày gần nhất, sau đó lấy median của các median nói trên để dự đoán cho zone và giờ tương ứng của tập test. Ý tưởng của phương pháp này mình học được từ [kernel này](https://www.kaggle.com/safavieh/median-estimation-by-fibonacci-et-al-lb-44-9) trên Kaggle.
+## Baseline 1: Moving average
+Mấu chốt của cách này là tính theo từng zone và từng giờ: Với mỗi zone và mỗi giờ, mình tính moving average của 7 ngày gần nhất trên tập train và dùng kết quả để dự đoán trên tập test cho zone và giờ tương ứng. Xem thêm code ví dụ tại [đây](https://forum.machinelearningcoban.com/t/aivivn-bandwidth-prediction-baseline-with-moving-average/5488).
 
 ## Baseline 2: XGBoost
 Model cho điểm cao nhất trên public LB của mình là XGBoost (Đọc thêm về XGBoost ở phần [Tham khảo](#tham-khảo)). Với cả 2 biến target (`bandwidth_total` và `max_user`), mình đều dùng XGBoost làm model duy nhất (tham số có thay đổi một chút cho mỗi model). Phần model training như vậy khá đơn giản (chỉ dùng 1 model), phần chiếm thời gian của mình nhiều nhất là nghiên cứu xem làm feature engneering thế nào. Trong phần còn lại mình sẽ trình bày các feature mình sử dụng cho bài này.
