@@ -13,7 +13,8 @@ import pandas as pd
 import xgboost as xgb
 from sklearn.linear_model import Ridge
 from sklearn.preprocessing import LabelEncoder
-from utils.preprocessing import *
+from utils.preprocessing2 import *
+from utils.non_ml import *
 import sys, os, logging, warnings
 
 # Disable future warnings
@@ -32,6 +33,10 @@ if __name__ == "__main__":
     try:
         df, test_df = load_csv(TRAIN_PATH), load_csv(TEST_PATH)
         logging.info('Training data and testing data loaded.')
+        
+        # Add missing values to the train data 
+        df = fill_missing_values(df)
+        logging.info('Missing values added.')
     except Exception as e:
         logging.error('Could not load the data. {}'.format(e))
         sys.exit()
@@ -39,14 +44,17 @@ if __name__ == "__main__":
     # =========== FEATURE ENGINEERING ===========
     try:
         # Time features
-        df, test_df = add_time_features(df), add_time_features(test_df)
+        df, test_df = add_time_features(df), add_time_features(test_df, test=True)
         
         # Special events featuers
         df, test_df = add_special_days_features(df), add_special_days_features(test_df)
 
         # Zone features
-        zfeatures = ['median_user_1m', 'median_bw_1m', 'median_user_3m', 'median_bw_3m', 'median_user_6m', 'median_bw_6m', 'median_user_1y', 'median_bw_1y']
-        aufeatures = ['lag_user_1d', 'lag_user_3d', 'lag_user_1w', 'lag_bw_1d', 'lag_bw_3d', 'lag_bw_1w']   
+        zfeatures = ['median_user_1m', 'median_bw_1m', 'median_user_3m', 
+             'median_bw_3m', 'median_user_6m', 'median_bw_6m', 'median_user_1y', 'median_bw_1y', 
+             'median_bw_per_user_6m', 'median_bw_per_user_3m', 'median_bw_per_user_1m', 'median_bw_per_user_1y'
+             ]
+        aufeatures = ['lag_user_1d', 'lag_user_3d', 'lag_user_1w', 'lag_bw_1d', 'lag_bw_3d', 'lag_bw_1w']
         zones, zones_autocorr = zone_features(df, zfeatures, aufeatures)
 
         features = ['zone_code', 'hour_id', 'dow_norm', 'month', 'doy', 'year', 'day', 'week', 'abnormal_bw', 'abnormal_u', 'holiday']
@@ -66,22 +74,22 @@ if __name__ == "__main__":
         test['zone_code'] = le.transform(test['zone_code'])
 
         # Add one more feature: linear regression prediction
-        clf1 = Ridge(alpha=1)
-        clf1.fit(dfr[features + zfeatures], np.log1p(dfr['bandwidth_total']))
-        dfr['ridge_bw'] = clf1.predict(dfr[features + zfeatures])
-        test['ridge_bw'] = clf1.predict(test[features + zfeatures])
+        lr1 = Ridge(alpha=1)
+        lr1.fit(dfr[features + zfeatures], np.log1p(dfr['bandwidth_total']))
+        dfr['ridge_bw'] = lr1.predict(dfr[features + zfeatures])
+        test['ridge_bw'] = lr1.predict(test[features + zfeatures])
 
-        clf2 = Ridge(alpha=1)
-        clf2.fit(dfr[features + zfeatures], np.log1p(dfr['max_user']))
-        dfr['ridge_u'] = clf2.predict(dfr[features + zfeatures])
-        test['ridge_u'] = clf2.predict(test[features + zfeatures])
+        lr2 = Ridge(alpha=1)
+        lr2.fit(dfr[features + zfeatures], np.log1p(dfr['max_user']))
+        dfr['ridge_u'] = lr2.predict(dfr[features + zfeatures])
+        test['ridge_u'] = lr2.predict(test[features + zfeatures])
         logging.info('New features added. Ready for training.')
     except Exception as e:
         logging.error('Something wrong with feature engineering. {}'.format(e))
         sys.exit()
 
     # =========== MODELLING ===========
-    # Init the models
+    # Init the XGBoost models
     m1 = xgb.XGBRegressor(
         n_jobs = -1,
         n_estimators = 1000,
@@ -94,8 +102,8 @@ if __name__ == "__main__":
         tree_method = 'exact',
         silent = 0,
         gamma = 0,
-        random_state = 1023
-      )
+        # random_state = 1023
+    )
 
     m2 = xgb.XGBRegressor(
         n_jobs = -1,
@@ -109,12 +117,12 @@ if __name__ == "__main__":
         tree_method = 'exact',
         silent = 0,
         gamma = 0,
-        random_state = 1023
+        # random_state = 1023
     )
 
-    # Fit the model to the data
+    # Fit the XGBoost models to the data
     try:
-        logging.info("Training started...")
+        logging.info("XGBoost training started...")
         for i, col in enumerate(['bandwidth_total', 'max_user']):
             X_train = dfr[features+zfeatures+rfeatures+aufeatures]
             y_train = dfr[col]
@@ -126,16 +134,39 @@ if __name__ == "__main__":
                 m = m2
                 m.fit(X_train, np.log1p(y_train), eval_metric='mae')
                 test[col] = np.expm1(m.predict(test[features+zfeatures+rfeatures+aufeatures]))
-        logging.info("Training complete. Ready for the submission.")
+        logging.info("XGBoost training complete.")
     except Exception as e:
         logging.error("Could not train the data. {}".format(e))
         sys.exit()
-            
+
+    # Median/mean based prediction 
+    try:
+        dfr['bw_log'] = np.log1p(dfr['bandwidth_total'])
+        dfr['u_log'] = np.log1p(dfr['max_user'])
+        logging.info('Non-ml prediction using median estimation...')
+        windows = [1,2]
+        for z in dfr.zone_code.unique():
+            zone = dfr[dfr.zone_code == z]
+            for h in df.hour_id.unique():
+                med_bw = median_estimation(zone[zone.hour_id == h]['bw_log'], windows)
+                med_u = median_estimation(zone[zone.hour_id == h]['u_log'], windows)
+                test.loc[(test['zone_code'] == z) & (test['hour_id'] == h), 'bandwidth_total_2'] = np.expm1(med_bw)
+                test.loc[(test['zone_code'] == z) & (test['hour_id'] == h), 'max_user_2'] = np.expm1(med_u)
+    except Exception as e:
+        logging.error("Could not use mean/median tricks. {}".format(e))
+        sys.exit()
+
+    # Combine 2 predictions 
+    p = 0.8
+    logging.info('Combining 2 predictions...')
+    test['bandwidth_total_final'] = p * test['bandwidth_total'] + (1 - p) * test['bandwidth_total_2']
+    test['max_user_final'] = p * test['max_user'] + (1 - p) * test['max_user_2']
+
     # =========== SUBMISSION ===========
     try:
-        test['bandwidth_total'] = test['bandwidth_total'].round(2)
-        test['max_user'] = test['max_user'].round()
-        test['label'] = test['bandwidth_total'].astype(str) + ' ' + test['max_user'].astype(int).astype(str)
+        test['bandwidth_total_final'] = test['bandwidth_total_final'].round(2)
+        test['max_user_final'] = test['max_user_final'].round()
+        test['label'] = test['bandwidth_total_final'].astype(str) + ' ' + test['max_user_final'].astype(int).astype(str)
         test[['id', 'label']].to_csv('submission.csv', index=False)
         logging.info('Submission file successfully created.')
     except Exception as e:

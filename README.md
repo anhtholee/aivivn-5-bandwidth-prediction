@@ -41,7 +41,10 @@ id,UPDATE_TIME,ZONE_CODE,HOUR_ID
 Apart from the above mentioned features, we also have `id` which is the unique id for the datapoints.
 
 ## Approach
-I used 2 slightly different XGBoost models, one for each of the target variable we have (`bandwidth_total` and `max_user`). The part that took me most of the time is not choosing the model, but feature engineering.
+The final prediction is the weighted average of XGBoost predictions and the predictions using median of medians(`windows = [1,2]`): `final_prediction = 0.8 * XGBoost + 0.2 * median_of_medians`. As for XGBoost, I used 2 identical XGBoost models for both target variables (`bandwidth_total` and `max_user`). The part that took me most of the time is feature engineering. 
+
+### Filling missing values.
+There are some missing values in the time series for all zones. My strategy is to use the value of the same day in the previous week to fill the nulls.
 
 ### Features
 Here are the features I included in the data before feeding it into XGBoost.
@@ -92,7 +95,7 @@ Finally, I used the Ridge regression model to fit the training data (using time 
 ## Results
 
 ## Future works
-There are a lot of room for improvement in this problem. With the enormous development of deep learning research in the recent years, one can try incorporating deep neural network models into this problem and see if it could surpass the traditionl ML approaches, which rely very much on the features of the dataset.
+There are a lot of room for improvement in this problem. With the enormous development of deep learning research in the recent years, one can try incorporating deep neural network models into this problem and see if it could surpass the traditional ML approaches, which rely very much on the features of the dataset.
 
 ## References
 - [1] [Time series Introduction](https://people.maths.bris.ac.uk/~magpn/Research/LSTS/STSIntro.html)
