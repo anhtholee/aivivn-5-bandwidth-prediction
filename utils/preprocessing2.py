@@ -2,7 +2,7 @@
 import numpy as np 
 import pandas as pd 
 from functools import reduce
-from sklearn.preprocessing import MinMaxScaler, RobustScaler, PowerTransformer
+from sklearn.preprocessing import MinMaxScaler
 
 def load_csv(path):
     """Load dataframe from a csv file
@@ -33,9 +33,8 @@ def fill_missing_values(df):
         ds_range = pd.DataFrame({'ds': r, 'zone_code': z})
         zone_merged = ds_range.merge(zone, how='left', on=['ds', 'zone_code'])
         zone_merged['hour_id'] = zone_merged['ds'].dt.hour
+        
         # Fill the null values 
-        # zone_merged['bandwidth_total'].fillna(method='ffill', inplace=True)
-        # zone_merged['max_user'].fillna(method='ffill', inplace=True)
         for col in ['bandwidth_total', 'max_user']:
             for index, row in zone_merged[zone_merged[col].isnull()].iterrows():
                 shifted_index = index - (24*7)
