@@ -1,6 +1,9 @@
 (Vietnamese version [here](README.vi.md))
 # AIVIVN's 5th competition: Server bandwidth prediction
-My solution for AIVIVN's 5th competition: [Server bandwidth prediction](https://www.aivivn.com/contests/5). To generate the submission file, install the dependencies using the command: `pip install -r requirements.txt`, and then run the `main.py` file.
+My solution for AIVIVN's 5th competition: [Server bandwidth prediction](https://www.aivivn.com/contests/5). To generate the submission file: 
+- Download the `csv` data files (`test_id.csv` and `train.csv`) and put them into the `data` folder.
+- Install the dependencies if needed using the command: `pip install -r requirements.txt`.
+- Run the `main.py` file.
 
 ## Context
 A company provides an entertainment platform for music, video, live stream, chat, etc. The company server system is divided into zones by geographic area. In order to meet the growing number of users, the company is interested in forecasting the total bandwidth of each server zone and the maximum number of users simultaneously accessing the server within the next month.

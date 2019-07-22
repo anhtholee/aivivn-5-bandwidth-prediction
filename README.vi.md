@@ -1,6 +1,9 @@
 (English version [here](README.md))
 # AIVIVN - Dự đoán lưu lượng server 2
-Model của mình cho cuộc thi thứ 5 của AIVIVN: [Dự đoán lưu lượng server 2](https://www.aivivn.com/contests/5). Để chạy code, các bạn cài dependencies: `pip install -r requirements.txt`, sau đó chạy file `main_combined.py`.
+Model của mình cho cuộc thi thứ 5 của AIVIVN: [Dự đoán lưu lượng server 2](https://www.aivivn.com/contests/5). Để chạy code, các bạn làm như sau:
+- Download các file dữ liệu cần thiết của cuộc thi (`test_id.csv` và `train.csv`) và để vào thư mục `data`.
+- Cài dependencies nếu cần thiết: `pip install -r requirements.txt`.
+- Chạy file `main_combined.py`.
 
 ## 	Giới thiệu
 Một công ty cung cấp nền tảng giải trí cho phép user sử dụng các dịch vụ music, video, live stream, chat, … Hệ thống công ty chia thành các zone theo khu vực địa lý. Để đáp ứng số lượng user ngày càng tăng, công ty muốn dự đoán được tổng bandwidth của mỗi server và số lượng tối đa user truy cập đồng thời vào server trong vòng một tháng tiếp theo để lên kế hoạch hoạt động.
