@@ -88,6 +88,10 @@ From the training data, I could extract the median total bandwidth and median ma
 - `median_bw_6m` 
 - `median_user_1y` 
 - `median_bw_1y`
+- `median_bw_per_user_6m`
+- `median_bw_per_user_3m`
+- `median_bw_per_user_1m`
+- `median_bw_per_user_1y`
 
 ##### Autocorrelation features
 I also calculated the lag features for 1 day, 3 days and 1 week of the last quarter of the data.
