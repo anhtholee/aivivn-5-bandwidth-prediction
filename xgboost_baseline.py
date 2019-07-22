@@ -1,4 +1,4 @@
-# Submission script for AIVIVN's 5th competition: Server bandwidth and max user prediction
+# Baseline script for AIVIVN's 5th competition: Server bandwidth and max user prediction
 # Created by: Le Anh Tho - @anhtholee 
 # Model used: XGBoost
 # Features used:

@@ -90,9 +90,6 @@ def add_special_days_features(df):
     range2 = pd.date_range('2019-01-30', '2019-02-12')
     abnormals = range1.union(range2)
 
-    # For zone 1 only
-    # range3 = pd.date_range('2017-12-23', '2017-12-25')
-
     # Init 2 new columns
     df['abnormal_bw'], df['abnormal_u'] = 0,0
     # Set the abnormal weights for each zone (negative if decrease, positive if increase)

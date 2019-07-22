@@ -1,11 +1,5 @@
 # Submission script for AIVIVN's 5th competition: Server bandwidth and max user prediction
 # Created by: Le Anh Tho - @anhtholee 
-# Model used: XGBoost
-# Features used:
-# - Time components
-# - Special day impact & holiday binary feature
-# - Zone-specific medians & autocorrelation
-# - Predictions using linear regression (used as a feature for XGBoost)
 
 # Import libraries
 import numpy as np
