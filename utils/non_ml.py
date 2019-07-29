@@ -1,12 +1,22 @@
 # Some function for estimating the predictions using non-ML approaches
-import numpy as np 
-import pandas as pd 
+import numpy as np
+import pandas as pd
 
-def moving_average(series, n):
+def geo_mean(iterable):
+    """
+        Calculate geometric mean of a series
+    """
+    a = np.array(iterable)
+    return a.prod()**(1.0/len(a))
+
+def moving_average(series, n, gmean=False):
     """
         Calculate average of last n observations
     """
-    return np.average(series[-n:])
+    if gmean:
+        return geo_mean(series[-n:])
+    else:
+        return np.average(series[-n:])
     
 def moving_median(series, n):
     """

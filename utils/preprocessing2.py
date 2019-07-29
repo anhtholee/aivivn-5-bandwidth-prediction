@@ -71,12 +71,36 @@ def add_time_features(df, test=False):
     df['year'] = df['ds'].dt.year
     df['day'] = df['ds'].dt.day
     df['week'] = df['ds'].dt.week
+    # df['weekend'] = df['dow'] // 5 == 1
 
     # Normalise day of week col
     week_period = 7 / (2 * np.pi)
     df['dow_norm'] = df.dow.values / week_period
 
     return df 
+
+def add_time_periods(df):
+    """Add time periods of a day 
+    
+    Args:
+        df (DataFrame): Input dataframe
+    Return: the modified df
+    """
+    df['hour_id'] = pd.to_numeric(df['hour_id'])
+    conditions = [
+        (df['hour_id'] >= 21) | (df['hour_id'] < 1),
+        (df['hour_id'] >= 1) & (df['hour_id'] < 6),
+        (df['hour_id'] >= 6) & (df['hour_id'] < 11),
+        (df['hour_id'] >= 11) & (df['hour_id'] < 14),
+        (df['hour_id'] >= 14) & (df['hour_id'] < 17),
+        (df['hour_id'] >= 17) & (df['hour_id'] < 19),
+        (df['hour_id'] >= 19) & (df['hour_id'] < 21),
+    ]
+    choices = ['21h-1h', '1h-6h', '6h-11h', '11h-14h', '14h-17h', '17h-19h', '19h-21h']
+    df['time_period'] = 'default'
+    for cond, ch in zip(conditions, choices):
+        df.loc[cond, 'time_period'] = ch
+    return df
 
 def add_special_days_features(df):
     """Add special events and holidays features

@@ -39,7 +39,8 @@ if __name__ == "__main__":
     try:
         # Time features
         df, test_df = add_time_features(df), add_time_features(test_df, test=True)
-        
+        # df, test_df = add_time_periods(df), add_time_periods(test_df)
+
         # Special events featuers
         df, test_df = add_special_days_features(df), add_special_days_features(test_df)
 
@@ -61,11 +62,14 @@ if __name__ == "__main__":
         test = pd.merge(test_df,zones,on='zone_code')
         test = test.merge(zones_autocorr, how='inner', on=['zone_code'])
 
-        # Label encoding for zone codes
-        le = LabelEncoder()
-        le.fit(dfr['zone_code'])
-        dfr['zone_code'] = le.transform(dfr['zone_code'])
-        test['zone_code'] = le.transform(test['zone_code'])
+        # Label encoding for categorical features
+        le1 = LabelEncoder()
+        le1.fit(dfr['zone_code'])
+        # le2.fit(dfr['time_period'])
+        dfr['zone_code'] = le1.transform(dfr['zone_code'])
+        test['zone_code'] = le1.transform(test['zone_code'])
+        # dfr['time_period'] = le2.transform(dfr['time_period'])
+        # test['time_period'] = le2.transform(test['time_period'])
 
         # Add one more feature: linear regression prediction
         lr1 = Ridge(alpha=1)
