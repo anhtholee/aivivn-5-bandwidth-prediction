@@ -1,11 +1,15 @@
 (English version [here](README.md))
 # AIVIVN - Dự đoán lưu lượng server 2
-Model của mình cho cuộc thi thứ 5 của AIVIVN: [Dự đoán lưu lượng server 2](https://www.aivivn.com/contests/5). Để chạy code, các bạn làm như sau:
+Model của mình cho cuộc thi thứ 5 của AIVIVN: [Dự đoán lưu lượng server 2](https://www.aivivn.com/contests/5). 
+
+## Hướng dẫn tạo file submission
+Để chạy code, các bạn làm như sau:
 - Download các file dữ liệu cần thiết của cuộc thi (`test_id.csv` và `train.csv`) và để vào thư mục `data`.
 - Cài dependencies nếu cần thiết: `pip install -r requirements.txt`.
 - Chạy file `main_combined.py`.
 
-## 	Giới thiệu
+## Giới thiệu
+*(Lấy từ từ trang web của cuộc thi)*
 Một công ty cung cấp nền tảng giải trí cho phép user sử dụng các dịch vụ music, video, live stream, chat, … Hệ thống công ty chia thành các zone theo khu vực địa lý. Để đáp ứng số lượng user ngày càng tăng, công ty muốn dự đoán được tổng bandwidth của mỗi server và số lượng tối đa user truy cập đồng thời vào server trong vòng một tháng tiếp theo để lên kế hoạch hoạt động.
 
 ## Data
@@ -42,14 +46,13 @@ id,UPDATE_TIME,ZONE_CODE,HOUR_ID
 ```
 Trong đó `UPDATE_TIME, HOUR_ID, ZONE_CODE` được định nghĩa như trên, id là mã số tương ứng cho file nộp bài. Các đội chơi cần dự đoán `BANDWIDTH_TOTAL`, và `MAX_USER` cho mỗi dòng.
 
-## Baseline 0: Moving average
-Mấu chốt của cách này là tính theo từng zone và từng giờ: Với mỗi zone và mỗi giờ, mình tính moving average của `x` ngày gần nhất trên tập train và dùng kết quả để dự đoán trên tập test cho zone và giờ tương ứng. Xem thêm code ví dụ tại [đây](https://forum.machinelearningcoban.com/t/aivivn-bandwidth-prediction-baseline-with-moving-average/5488).
+## Hướng giải quyết
+Mình đã thử một vài phương pháp cho bài toán này, các baseline dưới đây đều cho kết quả public LB tốt.
+- *Baseline 0 (Moving average)*: Mấu chốt của cách này là tính theo từng zone và từng giờ: Với mỗi zone và mỗi giờ, mình tính moving average của `x` ngày gần nhất trên tập train và dùng kết quả để dự đoán trên tập test cho zone và giờ tương ứng. Xem thêm code ví dụ tại [đây](https://forum.machinelearningcoban.com/t/aivivn-bandwidth-prediction-baseline-with-moving-average/5488).
+- *Baseline #1 (Median of medians)*: Tương tự với moving avg/median, nhưng lần này mình tính moving median của nhiều hơn 1 window khác nhau và lấy median của tất cả các median tính được.
+- *Baseline #2 - XGBoost* (Đọc thêm về XGBoost ở phần [Tham khảo](#tham-khảo)). Với cả 2 biến target (`bandwidth_total` và `max_user`), mình đều dùng XGBoost làm model duy nhất. Phần chiếm thời gian của mình nhiều nhất là nghiên cứu xem chọn feature thế nào.
 
-## Baseline 1: Median of medians
-Tương tự với moving avg/median, nhưng lần này mình tính moving median của nhiều hơn 1 window khác nhau và lấy median của tất cả các median tính được.
-
-## Baseline 2: XGBoost
-(Đọc thêm về XGBoost ở phần [Tham khảo](#tham-khảo)). Với cả 2 biến target (`bandwidth_total` và `max_user`), mình đều dùng XGBoost làm model duy nhất. Phần chiếm thời gian của mình nhiều nhất là nghiên cứu xem chọn feature thế nào.
+Final model của mình (cho kết quả public LB cao nhất) là kết hợp của Baseline #1 và Baseline #2 (`final_prediction = 0.8 * XGBoost + 0.2 * median_of_medians`).
 
 ### Missing values
 Data có một số thời điểm không có dữ liệu. Mình thêm vào bằng cách lấy dữ liệu cùng ngày cùng giờ của tuần trước (Ví dụ nếu dữ liệu bị mất vào 4h sáng thứ 4 thì mình sẽ lấy dữ liệu 4h sáng thứ 4 tuần trước).
@@ -102,10 +105,9 @@ Với 3 tháng gần nhất trong tập train, mình tính độ tự t
 #### Linear regression prediction features
 Cuối cùng, mình dùng linear regression để fit tập train (dùng các feature về thời gian, sự kiện đặc biệt và median của zone) và sau đó dùng chính dự đoán của model đó (trên cả tập train và test) để làm feature mới cho XGBoost (`ridge_bw` và `ridge_u`). Mình đã thử 2 model của sklearn là Ridge và Lasso (dùng các thông số mặc định) thì Ridge cho kết quả public tốt hơn nên mình chọn Ridge.
 
-## Final model
-Final model của mình (cho kết quả public LB cao nhất) là kết hợp của Baseline #1 và Baseline #2 (`final_prediction = 0.8 * XGBoost + 0.2 * median_of_medians`).
 
 ## Kết quả
+Final model cho kết quả `sMAPE = 5.12708` trên public LB.
 
 ## Mở rộng
 Có rất nhiều hướng khác để giải quyết bài toán time series, trong tương lai gần mình sẽ cố gắng thử áp dụng Deep Learning lên data này và so sánh với các phương pháp ML truyền thống. Với ML truyền thống, feature engineering sẽ tốn nhiều thời gian do kết quả model phụ thuộc rất nhiều vào feature của dữ liệu.

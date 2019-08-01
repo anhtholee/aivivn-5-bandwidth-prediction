@@ -1,11 +1,15 @@
 (Vietnamese version [here](README.vi.md))
 # AIVIVN's 5th competition: Server bandwidth prediction
-My solution for AIVIVN's 5th competition: [Server bandwidth prediction](https://www.aivivn.com/contests/5). To generate the submission file: 
+My solution for AIVIVN's 5th competition: [Server bandwidth prediction](https://www.aivivn.com/contests/5). 
+
+## How to generate the submission file
+To generate the submission file: 
 - Download the `csv` data files (`test_id.csv` and `train.csv`) and put them into the `data` folder.
 - Install the dependencies if needed using the command: `pip install -r requirements.txt`.
 - Run the `main.py` file.
 
 ## Context
+*(Taken from the competition's webpage, translated)*
 A company provides an entertainment platform for music, video, live stream, chat, etc. The company server system is divided into zones by geographic area. In order to meet the growing number of users, the company is interested in forecasting the total bandwidth of each server zone and the maximum number of users simultaneously accessing the server within the next month.
 
 ## Data
@@ -44,9 +48,9 @@ id,UPDATE_TIME,ZONE_CODE,HOUR_ID
 Apart from the above mentioned features, we also have `id` which is the unique id for the datapoints.
 
 ## Approach
-The final prediction is the weighted average of XGBoost predictions and the predictions using median of medians(`windows = [1,2]`): `final_prediction = 0.8 * XGBoost + 0.2 * median_of_medians`. As for XGBoost, I used 2 identical XGBoost models for both target variables (`bandwidth_total` and `max_user`). The part that took me most of the time is feature engineering. 
+The final prediction is the weighted average of XGBoost predictions and the predictions using median of medians(`windows = [1,2]`): `final_prediction = 0.8 * XGBoost + 0.2 * median_of_medians`. As for XGBoost, I used 2 identical models for both target variables (`bandwidth_total` and `max_user`). The part that took me most of the time is feature engineering. 
 
-### Filling missing values.
+### Filling missing values
 There are some missing values in the time series for all zones. My strategy is to use the value of the same day in the previous week to fill the nulls.
 
 ### Features
@@ -100,6 +104,7 @@ I also calculated the lag features for 1 day, 3 days and 1 week of the last quar
 Finally, I used the Ridge regression model to fit the training data (using time features, special event features and median features) and use the prediction on both the training and testing data as a feature (for both target variables). 
 
 ## Results
+The final model gives `sMAPE = 5.12708` on the public LB.
 
 ## Future works
 There are a lot of room for improvement in this problem. With the enormous development of deep learning research in the recent years, one can try incorporating deep neural network models into this problem and see if it could surpass traditional ML approaches, which rely very much on the features of the dataset.
