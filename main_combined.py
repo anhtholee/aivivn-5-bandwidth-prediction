@@ -41,7 +41,7 @@ if __name__ == "__main__":
         df, test_df = add_time_features(df), add_time_features(test_df, test=True)
         # df, test_df = add_time_periods(df), add_time_periods(test_df)
 
-        # Special events featuers
+        # Special events features
         df, test_df = add_special_days_features(df), add_special_days_features(test_df)
 
         # Zone features
