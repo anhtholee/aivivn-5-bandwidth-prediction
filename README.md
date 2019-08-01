@@ -1,6 +1,6 @@
 (Vietnamese version [here](README.vi.md))
 # AIVIVN's 5th competition: Server bandwidth prediction
-My solution for AIVIVN's 5th competition: [Server bandwidth prediction](https://www.aivivn.com/contests/5). 
+My solution to AIVIVN's 5th competition: [Server bandwidth prediction](https://www.aivivn.com/contests/5). 
 
 ## How to generate the submission file
 To generate the submission file (tested on Python 3.6 & Python 3.7): 
@@ -9,7 +9,8 @@ To generate the submission file (tested on Python 3.6 & Python 3.7):
 - Run the `main.py` file.
 
 ## Context
-*(Taken from the competition's webpage, translated)*
+*(Taken from the competition's webpage, translated to English)*
+
 A company provides an entertainment platform for music, video, live stream, chat, etc. The company server system is divided into zones by geographic area. In order to meet the growing number of users, the company is interested in forecasting the total bandwidth of each server zone and the maximum number of users simultaneously accessing the server within the next month.
 
 ## Data

@@ -10,6 +10,7 @@ Model của mình cho cuộc thi thứ 5 của AIVIVN: [Dự đoán lưu lư�
 
 ## Giới thiệu
 *(Lấy từ từ trang web của cuộc thi)*
+
 Một công ty cung cấp nền tảng giải trí cho phép user sử dụng các dịch vụ music, video, live stream, chat, … Hệ thống công ty chia thành các zone theo khu vực địa lý. Để đáp ứng số lượng user ngày càng tăng, công ty muốn dự đoán được tổng bandwidth của mỗi server và số lượng tối đa user truy cập đồng thời vào server trong vòng một tháng tiếp theo để lên kế hoạch hoạt động.
 
 ## Data

@@ -7,7 +7,7 @@ import pandas as pd
 import xgboost as xgb
 from sklearn.linear_model import Ridge
 from sklearn.preprocessing import LabelEncoder
-from utils.preprocessing2 import *
+from utils.preprocessing_df import *
 from utils.non_ml import *
 import sys, os, logging, warnings
 
@@ -92,7 +92,7 @@ if __name__ == "__main__":
         n_jobs = -1,
         n_estimators = 1000,
         eta = 0.01,
-        max_depth = 5,
+        max_depth = 4,
         min_child_weight = 1,
         booster = 'gbtree',
         subsample = 0.8,
