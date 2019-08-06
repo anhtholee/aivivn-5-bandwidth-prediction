@@ -1,6 +1,6 @@
 (English version [here](README.md))
-# AIVIVN - Dự đoán lưu lượng server 2
-Model của mình cho cuộc thi thứ 5 của AIVIVN: [Dự đoán lưu lượng server 2](https://www.aivivn.com/contests/5). 
+# AIviVN - Dự đoán lưu lượng server 2
+Model của mình cho cuộc thi thứ 5 của AIviVN: [Dự đoán lưu lượng server 2](https://www.aivivn.com/contests/5). 
 
 ## Hướng dẫn tạo file submission
 Để chạy code, các bạn làm như sau (đã chạy OK trên Python 3.6 và 3.7):

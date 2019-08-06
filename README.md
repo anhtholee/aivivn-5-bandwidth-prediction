@@ -1,6 +1,6 @@
 (Vietnamese version [here](README.vi.md))
-# AIVIVN's 5th competition: Server bandwidth prediction
-My solution to AIVIVN's 5th competition: [Server bandwidth prediction](https://www.aivivn.com/contests/5). 
+# AIviVN's 5th competition: Server bandwidth prediction
+My solution to AIviVN's 5th competition: [Server bandwidth prediction](https://www.aivivn.com/contests/5). 
 
 ## How to generate the submission file
 To generate the submission file (tested on Python 3.6 & Python 3.7): 
