@@ -4,7 +4,7 @@ Model của mình cho cuộc thi thứ 5 của AIviVN: [Dự đoán lưu lư�
 
 ## Hướng dẫn tạo file submission
 Để chạy code, các bạn làm như sau (đã chạy OK trên Python 3.6 và 3.7):
-- Download các file dữ liệu cần thiết của cuộc thi (`test_id.csv` và `train.csv`) và để vào thư mục `data`.
+- Download các file dữ liệu cần thiết của cuộc thi (`test_id.csv` và `train.csv`) và để vào một thư mục, đặt tên là `data`.
 - Cài dependencies nếu cần thiết: `pip install -r requirements.txt`.
 - Chạy file `main_combined.py`.
 
@@ -108,7 +108,7 @@ Cuối cùng, mình dùng linear regression để fit tập train (dùng 
 
 
 ## Kết quả
-Final model cho kết quả `sMAPE = 5.12708` trên public LB.
+Final model cho kết quả `sMAPE = 5.12708` trên public LB, và `sMAPE = 5.18001` trên bảng tổng sắp.
 
 ## Mở rộng
 Có rất nhiều hướng khác để giải quyết bài toán time series, trong tương lai gần mình sẽ cố gắng thử áp dụng Deep Learning lên data này và so sánh với các phương pháp ML truyền thống. Với ML truyền thống, feature engineering sẽ tốn nhiều thời gian do kết quả model phụ thuộc rất nhiều vào feature của dữ liệu.

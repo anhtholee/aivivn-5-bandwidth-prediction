@@ -4,7 +4,7 @@ My solution to AIviVN's 5th competition: [Server bandwidth prediction](https://w
 
 ## How to generate the submission file
 To generate the submission file (tested on Python 3.6 & Python 3.7): 
-- Download the `csv` data files (`test_id.csv` and `train.csv`) and put them into the `data` folder.
+- Download the `csv` data files (`test_id.csv` and `train.csv`), put them into a folder and name it `data`.
 - Install the dependencies if needed using the command: `pip install -r requirements.txt`.
 - Run the `main.py` file.
 
@@ -105,7 +105,7 @@ I also calculated the lag features for 1 day, 3 days and 1 week of the last quar
 Finally, I used the Ridge regression model to fit the training data (using time features, special event features and median features) and use the prediction on both the training and testing data as a feature (for both target variables). 
 
 ## Results
-The final model gives `sMAPE = 5.12708` on the public LB.
+The final model gives `sMAPE = 5.12708` on the public LB and `sMAPE = 5.18001` on the final LB.
 
 ## Future works
 There are a lot of room for improvement in this problem. With the enormous development of deep learning research in the recent years, one can try incorporating deep neural network models into this problem and see if it could surpass traditional ML approaches, which rely very much on the features of the dataset.
