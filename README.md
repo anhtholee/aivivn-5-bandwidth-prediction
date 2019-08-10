@@ -6,7 +6,7 @@ My solution to AIviVN's 5th competition: [Server bandwidth prediction](https://w
 To generate the submission file (tested on Python 3.6 & Python 3.7): 
 - Download the `csv` data files (`test_id.csv` and `train.csv`), put them into a folder and name it `data`.
 - Install the dependencies if needed using the command: `pip install -r requirements.txt`.
-- Run the `main.py` file.
+- Run the `main_combined.py` file.
 
 ## Context
 *(Taken from the competition's webpage, translated to English)*
