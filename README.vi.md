@@ -51,12 +51,12 @@ Trong đó `UPDATE_TIME, HOUR_ID, ZONE_CODE` được định nghĩa như trên,
 Mình đã thử một vài phương pháp cho bài toán này, các baseline dưới đây đều cho kết quả public LB tốt.
 - *Baseline 0 (Moving average)*: Mấu chốt của cách này là tính theo từng zone và từng giờ: Với mỗi zone và mỗi giờ, mình tính moving average của `x` ngày gần nhất trên tập train và dùng kết quả để dự đoán trên tập test cho zone và giờ tương ứng. Xem thêm code ví dụ tại [đây](https://forum.machinelearningcoban.com/t/aivivn-bandwidth-prediction-baseline-with-moving-average/5488).
 - *Baseline #1 (Median of medians)*: Tương tự với moving avg/median, nhưng lần này mình tính moving median của nhiều hơn 1 window khác nhau và lấy median của tất cả các median tính được.
-- *Baseline #2 - XGBoost* (Đọc thêm về XGBoost ở phần [Tham khảo](#tham-khảo)). Với cả 2 biến target (`bandwidth_total` và `max_user`), mình đều dùng XGBoost làm model duy nhất. Phần chiếm thời gian của mình nhiều nhất là nghiên cứu xem chọn feature thế nào.
+- *Baseline #2 - XGBoost* (Đọc thêm về XGBoost ở phần [Tham khảo](#tham-khảo)). Với cả 2 biến target (`bandwidth_total` và `max_user`), mình đều dùng XGBoost làm model duy nhất.
 
 Final model của mình (cho kết quả public LB cao nhất) là kết hợp của Baseline #1 và Baseline #2 (`final_prediction = 0.8 * XGBoost + 0.2 * median_of_medians`).
 
 ### Missing values
-Data có một số thời điểm không có dữ liệu. Mình thêm vào bằng cách lấy dữ liệu cùng ngày cùng giờ của tuần trước (Ví dụ nếu dữ liệu bị mất vào 4h sáng thứ 4 thì mình sẽ lấy dữ liệu 4h sáng thứ 4 tuần trước).
+Tập train có một số thời điểm không có dữ liệu. Mình thêm vào bằng cách lấy dữ liệu cùng ngày cùng giờ của tuần trước (Ví dụ nếu dữ liệu bị mất vào 4h sáng thứ 4 thì mình sẽ lấy dữ liệu 4h sáng thứ 4 tuần trước).
 
 ### Features
 #### Time features (các đặc trưng về thời gian)
