@@ -108,7 +108,7 @@ Cuối cùng, mình dùng linear regression để fit tập train (dùng 
 
 
 ## Kết quả
-Final model cho kết quả `sMAPE = 5.12708` trên public LB, và `sMAPE = 5.18001` trên bảng tổng sắp.
+Final model cho kết quả `sMAPE = 5.12708` trên public LB, và `sMAPE = 5.18001` trên bảng tổng sắp (2nd place).
 
 ## Mở rộng
 Có rất nhiều hướng khác để giải quyết bài toán time series, trong tương lai gần mình sẽ cố gắng thử áp dụng Deep Learning lên data này và so sánh với các phương pháp ML truyền thống. Với ML truyền thống, feature engineering sẽ tốn nhiều thời gian do kết quả model phụ thuộc rất nhiều vào feature của dữ liệu.
